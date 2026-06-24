@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>むぎ観察日記</title>
+
+  <style>
+    body {
+      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+      background: #f6f3ee;
+      color: #2b2b2b;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 16px;
+      line-height: 1.7;
+    }
+
+    header {
+      position: relative;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e0d6c8;
+    }
+
+    header::after {
+      content: "🐈‍⬛";
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .entry {
+      background: #fffdf9;
+      border: 1px solid #e8e0d6;
+      box-shadow: 2px 2px 0px #e0d6c8;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      transform: rotate(-0.2deg);
+    }
+
+    .date {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .mugi-box {
+      background: #fff;
+      border: 1px dashed #cbb394;
+      padding: 12px;
+      margin: 14px 0;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 999px;
+      background: #d8c3a5;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>むぎ観察日記</h1>
+  <div class="sub">管理人：むぎ（黒猫・かぎしっぽ・監修中の95%は睡眠）</div>
+</header>
+
+<div class="mugi-box">
+  むぎの反応：
+  <div id="mugi-react">……</div>
+</div>
+
+<div class="mugi-box">
+  むぎのあなたへの態度：
+  <div id="mugi-attitude">初対面</div>
+</div>
+
+<div class="mugi-box">
+  むぎによる呼び名：
+  <div id="mugi-name">未分類の人間</div>
+</div>
+
+<div class="mugi-box">
+  今日のむぎコメント：
+  <div id="mugi-comment">…</div>
+  <button onclick="generateMugiComment()">むぎに聞く</button>
+</div>
+
+<div class="mugi-box">
+  むぎ実況：
+  <div id="mugi-live">まだ観察開始していない</div>
+</div>
+
+<div class="entry">
+  <div class="date">2026-06-24</div>
+  飼い主がまた何かを考えている。観察対象として記録。
+</div>
+
+<footer>
+  © むぎ観察日記（気まぐれ運用）
+</footer>
+
+<script>
+/* -------------------------
+   基本データ
+------------------------- */
+
+const userId = (() => {
+  let id = localStorage.getItem("mugi_user_id");
+  if (!id) {
+    id = "human_" + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem("mugi_user_id", id);
+  }
+  return id;
+})();
+
+let memory = JSON.parse(localStorage.getItem("mugi_memory") || "{}");
+
+if (!memory[userId]) {
+  memory[userId] = {
+    visits: 0,
+    clicks: 0
+  };
+}
+
+/* -------------------------
+   むぎ反応
+------------------------- */
+
+const mugiReactions = [
+  "……開いたな。",
+  "また来た。",
+  "観察開始。",
+  "人間が画面を見ている。",
+  "特に用はないが見ている。"
+];
+
+/* -------------------------
+   むぎコメント
+------------------------- */
+
+const mugiComments = [
+  "人間がまた何か考えている。",
+  "さっきから動きがうるさい。",
+  "ごはんの気配はない。",
+  "まあいい、見てやる。",
+  "今は静観中だ。"
+];
+
+/* -------------------------
+   呼び名
+------------------------- */
+
+function getMugiName(data) {
+  if (data.visits === 1) return "初めての人間";
+  if (data.visits < 3) return "様子見の人間";
+  if (data.clicks > 30) return "せわしない人間";
+  if (data.visits > 10) return "常連の人間";
+  return "なんとなくの人間";
+}
+
+/* -------------------------
+   表示更新
+------------------------- */
+
+function updateUI() {
+  const data = memory[userId];
+
+  document.getElementById("mugi-react").textContent =
+    mugiReactions[Math.floor(Math.random() * mugiReactions.length)];
+
+  document.getElementById("mugi-attitude").textContent =
+    data.visits < 3
+      ? "観察中（警戒）"
+      : data.visits < 8
+      ? "見慣れてきた"
+      : "なついている（かもしれない）";
+
+  document.getElementById("mugi-name").textContent =
+    getMugiName(data);
+}
+
+/* -------------------------
+   むぎコメント生成
+------------------------- */
+
+function generateMugiComment() {
+  document.getElementById("mugi-comment").textContent =
+    mugiComments[Math.floor(Math.random() * mugiComments.length)];
+}
+
+/* -------------------------
+   実況
+------------------------- */
+
+const liveComments = [
+  "人間が動いている",
+  "画面を操作している",
+  "何かを探している",
+  "落ち着きがない"
+];
+
+function live() {
+  document.getElementById("mugi-live").textContent =
+    liveComments[Math.floor(Math.random() * liveComments.length)];
+}
+
+/* -------------------------
+   行動トラッキング
+------------------------- */
+
+document.addEventListener("click", () => {
+  memory[userId].clicks++;
+  localStorage.setItem("mugi_memory", JSON.stringify(memory));
+  live();
+  updateUI();
+});
+
+document.addEventListener("mousemove", () => {
+  if (Math.random() < 0.05) live();
+});
+
+/* -------------------------
+   起動
+------------------------- */
+
+window.addEventListener("load", () => {
+  memory[userId].visits++;
+  localStorage.setItem("mugi_memory", JSON.stringify(memory));
+
+  generateMugiComment();
+  updateUI();
+
+  document.getElementById("mugi-react").textContent =
+    mugiReactions[Math.floor(Math.random() * mugiReactions.length)];
+});
+</script>
+
+</body>
+</html>
