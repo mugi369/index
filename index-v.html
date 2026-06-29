@@ -118,6 +118,14 @@ status =
 
 }
 
+if(Math.random() < 0.01){
+    status = "鼻の下クソワロ。";
+}
+
+if(hour >= 2 && hour < 5){
+    status = "寝ろ。";
+}
+
 visitCount++;
 
 localStorage.setItem(
@@ -182,6 +190,14 @@ document
 days
 +
 " 日目";
+
+if(days === 1){
+    ageComment = "まだ新築だな。";
+}
+
+if(days >= 30){
+    ageComment = "ずいぶん住み着いたな。";
+}
 </script>
 
 </body>
