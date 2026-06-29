@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>むぎ観察日記</title>
 
+<style>
+body{
+    background:#111;
+    color:#eee;
+    font-family:sans-serif;
+    text-align:center;
+    padding:40px;
+}
+
+.card{
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+    border:1px solid #444;
+    border-radius:15px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🐈‍⬛ むぎ観察日記</h1>
+
+<p id="message">
+また来たのか。
+</p>
+
+<p>
+訪問回数：
+<span id="visitCount">0</span>
+</p>
+
+<button id="mugiButton">
+むぎを呼ぶ
+</button>
+
+</div>
+
+<script>
+
+let visitCount =
+Number(
+localStorage.getItem("visitCount")
+|| 0
+);
+
+visitCount++;
+
+localStorage.setItem(
+"visitCount",
+visitCount
+);
+
+document.getElementById(
+"visitCount"
+).textContent =
+visitCount;
+
+const comments = [
+
+"また来たのか。",
+
+"人間だ。",
+
+"観察対象を確認。",
+
+"今日は静かだな。",
+
+"ちくわ天。",
+
+"鼻の下クソワロ。"
+
+];
+
+document
+.getElementById("mugiButton")
+.addEventListener(
+"click",
+function(){
+
+const comment =
+comments[
+Math.floor(
+Math.random()
+*
+comments.length
+)
+];
+
+document.getElementById(
+"message"
+).textContent =
+comment;
+
+}
+);
+
+</script>
+
+</body>
+</html>
