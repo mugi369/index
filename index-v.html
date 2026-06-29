@@ -36,9 +36,9 @@ button{
 
 <h1>🐈‍⬛ むぎ観察日記</h1>
 
-<p id="message">
-また来たのか。
-</p>
+<p id="message"></p>
+
+<p id="siteAge"></p>
 
 <p>
 訪問回数：
@@ -58,6 +58,65 @@ Number(
 localStorage.getItem("visitCount")
 || 0
 );
+
+if(!localStorage.getItem("siteBirth")){
+
+localStorage.setItem(
+"siteBirth",
+Date.now()
+);
+
+}
+
+const birth =
+Number(
+localStorage.getItem("siteBirth")
+);
+
+const days =
+Math.floor(
+(Date.now()-birth)
+/
+86400000
+)+1;
+
+let status =
+"また来たのか。";
+
+if(visitCount >= 5)
+status =
+"最近よく見るな。";
+
+if(visitCount >= 10)
+status =
+"顔を覚えた。";
+
+if(visitCount >= 30)
+status =
+"常連だな。";
+
+if(visitCount >= 100)
+status =
+"もう管理人だろ。";
+
+const hour =
+new Date().getHours();
+
+if(hour >= 0 && hour < 5){
+
+status =
+"お前も起きてるのか。";
+
+}
+
+if(
+Math.random() < 0.02
+){
+
+status =
+"ちくわ天。";
+
+}
 
 visitCount++;
 
@@ -110,6 +169,19 @@ comment;
 }
 );
 
+document
+.getElementById("message")
+.textContent =
+status;
+
+document
+.getElementById("siteAge")
+.textContent =
+"開設 "
++
+days
++
+" 日目";
 </script>
 
 </body>
